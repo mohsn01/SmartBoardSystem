@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Local data: contains student records and photos, never publish
+db.sqlite3
+*.sqlite3
+media/
+STImag/
+
+# Local tooling
+.claude/

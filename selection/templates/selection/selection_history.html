@@ -1,0 +1,96 @@
+{% extends "selection/base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Selection History</h1>
+        <p class="text-muted">All previous board selections recorded automatically.</p>
+    </div>
+
+    <a href="/board/" class="btn btn-primary">New Selection</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search student, subject, or priority...">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Average</th>
+                        <th>Priority</th>
+                        <th>Outcome</th>
+                        <th>Selected At</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in selections %}
+                    <tr>
+                        <td>{{ item.student.full_name }}</td>
+                        <td>{{ item.subject.name }}</td>
+                        <td>{{ item.average_at_selection }}</td>
+                        <td>
+
+    {% if item.priority_level|lower == "high" %}
+        <span class="badge bg-danger">
+            High
+        </span>
+
+    {% elif item.priority_level|lower == "medium" %}
+        <span class="badge bg-warning text-dark">
+            Medium
+        </span>
+
+    {% else %}
+        <span class="badge bg-success">
+            Low
+        </span>
+
+    {% endif %}
+
+</td>
+                        <td>
+    {% if item.outcome == "solved" %}
+        <span class="badge bg-success">Solved</span>
+    {% elif item.outcome == "not_solved" %}
+        <span class="badge bg-secondary">Not solved</span>
+    {% elif item.outcome == "partial" %}
+        <span class="badge bg-warning text-dark">Partly correct</span>
+    {% elif item.outcome == "skipped" %}
+        <span class="badge bg-light text-dark border">Skipped{% if item.skip_reason %} ({{ item.get_skip_reason_display }}){% endif %}</span>
+    {% else %}
+        <span class="text-muted">&mdash;</span>
+    {% endif %}
+</td>
+                        <td>{{ item.selected_at }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No selection history found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#historyTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

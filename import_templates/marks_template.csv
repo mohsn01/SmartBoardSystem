@@ -1,0 +1,165 @@
+student_id,subject_name,exam_mark,homework_mark
+MSTU001,3AC1 - Mathématiques,62,15
+MSTU001,3AC1 - Français,60,20
+MSTU001,3AC1 - Arabe,70,18
+MSTU001,3AC1 - Sciences de la Vie et de la Terre,70,12
+MSTU002,3AC1 - Mathématiques,45,20
+MSTU002,3AC1 - Français,55,10
+MSTU002,3AC1 - Arabe,65,16
+MSTU002,3AC1 - Sciences de la Vie et de la Terre,58,14
+MSTU003,3AC1 - Mathématiques,70,18
+MSTU003,3AC1 - Français,68,17
+MSTU003,3AC1 - Arabe,57,12
+MSTU003,3AC1 - Sciences de la Vie et de la Terre,66,20
+MSTU004,3AC1 - Mathématiques,70,15
+MSTU004,3AC1 - Français,70,19
+MSTU004,3AC1 - Arabe,62,13
+MSTU004,3AC1 - Sciences de la Vie et de la Terre,69,20
+MSTU005,3AC1 - Mathématiques,64,16
+MSTU005,3AC1 - Français,59,15
+MSTU005,3AC1 - Arabe,67,18
+MSTU005,3AC1 - Sciences de la Vie et de la Terre,61,10
+MSTU006,3AC1 - Mathématiques,70,17
+MSTU006,3AC1 - Français,60,20
+MSTU006,3AC1 - Arabe,54,8
+MSTU006,3AC1 - Sciences de la Vie et de la Terre,65,15
+MSTU007,3AC1 - Mathématiques,69,12
+MSTU007,3AC1 - Français,53,7
+MSTU007,3AC1 - Arabe,63,14
+MSTU007,3AC1 - Sciences de la Vie et de la Terre,70,18
+MSTU008,3AC1 - Mathématiques,66,11
+MSTU008,3AC1 - Français,64,16
+MSTU008,3AC1 - Arabe,56,9
+MSTU008,3AC1 - Sciences de la Vie et de la Terre,68,20
+MSTU009,3AC1 - Mathématiques,70,15
+MSTU009,3AC1 - Français,57,12
+MSTU009,3AC1 - Arabe,69,17
+MSTU009,3AC1 - Sciences de la Vie et de la Terre,62,13
+MSTU010,3AC1 - Mathématiques,70,19
+MSTU010,3AC1 - Français,69,20
+MSTU010,3AC1 - Arabe,61,15
+MSTU010,3AC1 - Sciences de la Vie et de la Terre,70,18
+MSTU011,3AC2 - Mathématiques,67,14
+MSTU011,3AC2 - Français,62,15
+MSTU011,3AC2 - Arabe,60,20
+MSTU011,3AC2 - Sciences de la Vie et de la Terre,70,18
+MSTU012,3AC2 - Mathématiques,68,12
+MSTU012,3AC2 - Français,55,10
+MSTU012,3AC2 - Arabe,65,16
+MSTU012,3AC2 - Sciences de la Vie et de la Terre,58,14
+MSTU013,3AC2 - Mathématiques,70,18
+MSTU013,3AC2 - Français,68,17
+MSTU013,3AC2 - Arabe,57,12
+MSTU013,3AC2 - Sciences de la Vie et de la Terre,66,20
+MSTU014,3AC2 - Mathématiques,70,15
+MSTU014,3AC2 - Français,70,19
+MSTU014,3AC2 - Arabe,62,13
+MSTU014,3AC2 - Sciences de la Vie et de la Terre,69,20
+MSTU015,3AC2 - Mathématiques,64,16
+MSTU015,3AC2 - Français,59,15
+MSTU015,3AC2 - Arabe,67,18
+MSTU015,3AC2 - Sciences de la Vie et de la Terre,61,10
+MSTU016,3AC2 - Mathématiques,70,17
+MSTU016,3AC2 - Français,60,20
+MSTU016,3AC2 - Arabe,54,8
+MSTU016,3AC2 - Sciences de la Vie et de la Terre,65,15
+MSTU017,3AC2 - Mathématiques,69,12
+MSTU017,3AC2 - Français,53,7
+MSTU017,3AC2 - Arabe,63,14
+MSTU017,3AC2 - Sciences de la Vie et de la Terre,70,18
+MSTU018,3AC2 - Mathématiques,66,11
+MSTU018,3AC2 - Français,64,16
+MSTU018,3AC2 - Arabe,56,9
+MSTU018,3AC2 - Sciences de la Vie et de la Terre,68,20
+MSTU019,3AC2 - Mathématiques,70,15
+MSTU019,3AC2 - Français,57,12
+MSTU019,3AC2 - Arabe,69,17
+MSTU019,3AC2 - Sciences de la Vie et de la Terre,62,13
+MSTU020,3AC2 - Mathématiques,70,19
+MSTU020,3AC2 - Français,69,20
+MSTU020,3AC2 - Arabe,61,15
+MSTU020,3AC2 - Sciences de la Vie et de la Terre,70,18
+MSTU021,3AC2 - Mathématiques,67,14
+MSTU021,3AC2 - Français,62,15
+MSTU021,3AC2 - Arabe,60,20
+MSTU021,3AC2 - Sciences de la Vie et de la Terre,70,18
+MSTU022,3AC2 - Mathématiques,68,12
+MSTU022,3AC2 - Français,55,10
+MSTU022,3AC2 - Arabe,65,16
+MSTU022,3AC2 - Sciences de la Vie et de la Terre,58,14
+MSTU023,3AC2 - Mathématiques,70,18
+MSTU023,3AC2 - Français,68,17
+MSTU023,3AC2 - Arabe,57,12
+MSTU023,3AC2 - Sciences de la Vie et de la Terre,66,20
+MSTU024,3AC2 - Mathématiques,70,15
+MSTU024,3AC2 - Français,70,19
+MSTU024,3AC2 - Arabe,62,13
+MSTU024,3AC2 - Sciences de la Vie et de la Terre,69,20
+MSTU025,3AC3 - Mathématiques,64,16
+MSTU025,3AC3 - Français,59,15
+MSTU025,3AC3 - Arabe,67,18
+MSTU025,3AC3 - Sciences de la Vie et de la Terre,61,10
+MSTU026,3AC3 - Mathématiques,70,17
+MSTU026,3AC3 - Français,60,20
+MSTU026,3AC3 - Arabe,54,8
+MSTU026,3AC3 - Sciences de la Vie et de la Terre,65,15
+MSTU027,3AC3 - Mathématiques,69,12
+MSTU027,3AC3 - Français,53,7
+MSTU027,3AC3 - Arabe,63,14
+MSTU027,3AC3 - Sciences de la Vie et de la Terre,70,18
+MSTU028,3AC3 - Mathématiques,66,11
+MSTU028,3AC3 - Français,64,16
+MSTU028,3AC3 - Arabe,56,9
+MSTU028,3AC3 - Sciences de la Vie et de la Terre,68,20
+MSTU029,3AC3 - Mathématiques,70,15
+MSTU029,3AC3 - Français,57,12
+MSTU029,3AC3 - Arabe,69,17
+MSTU029,3AC3 - Sciences de la Vie et de la Terre,62,13
+MSTU030,3AC3 - Mathématiques,70,19
+MSTU030,3AC3 - Français,69,20
+MSTU030,3AC3 - Arabe,61,15
+MSTU030,3AC3 - Sciences de la Vie et de la Terre,70,18
+MSTU031,3AC3 - Mathématiques,67,14
+MSTU031,3AC3 - Français,62,15
+MSTU031,3AC3 - Arabe,60,20
+MSTU031,3AC3 - Sciences de la Vie et de la Terre,70,18
+MSTU032,3AC3 - Mathématiques,68,12
+MSTU032,3AC3 - Français,55,10
+MSTU032,3AC3 - Arabe,65,16
+MSTU032,3AC3 - Sciences de la Vie et de la Terre,58,14
+MSTU033,3AC3 - Mathématiques,60,14
+MSTU033,3AC3 - Français,50,20
+MSTU033,3AC3 - Arabe,49,20
+MSTU033,3AC3 - Sciences de la Vie et de la Terre,55,15
+MSTU034,3AC4 - Mathématiques,69,20
+MSTU034,3AC4 - Français,62,18
+MSTU034,3AC4 - Arabe,58,20
+MSTU034,3AC4 - Sciences de la Vie et de la Terre,70,15
+MSTU035,3AC4 - Mathématiques,64,16
+MSTU035,3AC4 - Français,59,15
+MSTU035,3AC4 - Arabe,67,18
+MSTU035,3AC4 - Sciences de la Vie et de la Terre,61,10
+MSTU036,3AC4 - Mathématiques,70,17
+MSTU036,3AC4 - Français,60,20
+MSTU036,3AC4 - Arabe,54,8
+MSTU036,3AC4 - Sciences de la Vie et de la Terre,65,15
+MSTU037,3AC4 - Mathématiques,69,12
+MSTU037,3AC4 - Français,53,7
+MSTU037,3AC4 - Arabe,63,14
+MSTU037,3AC4 - Sciences de la Vie et de la Terre,70,18
+MSTU038,3AC4 - Mathématiques,66,11
+MSTU038,3AC4 - Français,64,16
+MSTU038,3AC4 - Arabe,56,9
+MSTU038,3AC4 - Sciences de la Vie et de la Terre,68,20
+MSTU039,3AC4 - Mathématiques,70,15
+MSTU039,3AC4 - Français,57,12
+MSTU039,3AC4 - Arabe,69,17
+MSTU039,3AC4 - Sciences de la Vie et de la Terre,62,13
+MSTU040,3AC4 - Mathématiques,70,19
+MSTU040,3AC4 - Français,69,20
+MSTU040,3AC4 - Arabe,61,15
+MSTU040,3AC4 - Sciences de la Vie et de la Terre,70,18
+MSTU041,3AC4 - Mathématiques,67,14
+MSTU041,3AC4 - Français,62,15
+MSTU041,3AC4 - Arabe,60,20
+MSTU041,3AC4 - Sciences de la Vie et de la Terre,70,18

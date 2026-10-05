@@ -1,0 +1,69 @@
+{% extends "selection/base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">Student Progress Report</h1>
+<p class="text-muted">Compare average mark at selection time with current average mark.</p>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search progress records...">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="progressTable">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Old Average</th>
+                        <th>Current Average</th>
+                        <th>Difference</th>
+                        <th>Status</th>
+                        <th>Selected At</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in progress_data %}
+                    <tr>
+                        <td>{{ item.student.full_name }}</td>
+                        <td>{{ item.subject.name }}</td>
+                        <td>{{ item.old_average }}</td>
+                        <td>{{ item.current_average }}</td>
+                        <td>{{ item.difference }}</td>
+                        <td>
+                            {% if item.status == "Improved" %}
+                                <span class="badge bg-success">Improved</span>
+                            {% elif item.status == "Decreased" %}
+                                <span class="badge bg-danger">Decreased</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No Change</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.selected_at }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No progress data found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#progressTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

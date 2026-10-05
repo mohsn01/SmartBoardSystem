@@ -1,0 +1,3 @@
+subject_name,topic_name,text,answer,answer_type,choices,difficulty,explanation
+3AC1 - Mathématiques,Fractions,What is 1/2 + 1/4?,3/4,multiple_choice,1/4|1/2|3/4|1,easy,Convert to a common denominator of 4: 2/4 + 1/4 = 3/4.
+3AC1 - Mathématiques,Fractions,Simplify 6/8 to its lowest terms.,3/4,open,,medium,Divide both numbers by their greatest common divisor (2).

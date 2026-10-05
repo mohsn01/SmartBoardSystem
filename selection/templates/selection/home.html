@@ -1,0 +1,80 @@
+{% extends "selection/base.html" %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Smart Student Board Selection System</h1>
+    <p class="text-muted">
+        AI-assisted classroom participation and academic improvement tracking
+    </p>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">Admin Panel</h5>
+                <p class="text-muted">
+                    Manage students, subjects, marks, and bulk imports.
+                </p>
+                <a href="/admin/" class="btn btn-primary">Open Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">Board Selection</h5>
+                <p class="text-muted">
+                    Select students intelligently based on academic performance.
+                </p>
+                <a href="/board/" class="btn btn-success">Start Selection</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">Reports Dashboard</h5>
+                <p class="text-muted">
+                    View progress, improvement, and participation analytics.
+                </p>
+                <a href="/reports/" class="btn btn-dark">View Reports</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4 mt-2">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">Selection History</h5>
+                <p class="text-muted">
+                    Review all students selected for board participation.
+                </p>
+                <a href="/selection-history/" class="btn btn-outline-primary">View History</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">Progress Report</h5>
+                <p class="text-muted">
+                    Check whether selected students improved after participation.
+                </p>
+                <a href="/progress-report/" class="btn btn-outline-success">View Progress</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

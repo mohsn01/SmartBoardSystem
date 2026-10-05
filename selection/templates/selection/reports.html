@@ -1,0 +1,188 @@
+{% extends "selection/base.html" %}
+
+{% block content %}
+
+<h1 class="page-title mb-4">Reports Dashboard</h1>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ total_students }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ total_subjects }}</h3>
+                <p>Subjects</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ total_marks }}</h3>
+                <p>Marks</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ total_selections }}</h3>
+                <p>Selections</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ weak_students }}</h3>
+                <p>Weak Records</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm border-0 text-center stat-card">
+            <div class="card-body">
+                <h3>{{ improved_count }}</h3>
+                <p>Improved</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="fw-bold">Performance Distribution</h5>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="fw-bold">Progress After Selection</h5>
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="GET">
+            <div class="row g-2">
+
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" placeholder="Search student name">
+                </div>
+
+                <div class="col-md-3">
+                    <select name="classroom" class="form-select">
+                        <option value="">All Classrooms</option>
+                        {% for classroom in classrooms %}
+                            <option value="{{ classroom }}">{{ classroom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All Performance</option>
+                        <option value="weak">Weak</option>
+                        <option value="average">Average</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100">Filter</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-3">Marks Records</h5>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Classroom</th>
+                        <th>Subject</th>
+                        <th>Average</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for mark in marks %}
+                    <tr>
+                        <td>{{ mark.student.full_name }}</td>
+                        <td>{{ mark.student.classroom }}</td>
+                        <td>{{ mark.subject.name }}</td>
+                        <td>{{ mark.average }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const performanceCtx = document.getElementById('performanceChart');
+
+new Chart(performanceCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Weak', 'Average', 'Excellent'],
+        datasets: [{
+            data: [{{ weak_count }}, {{ average_count }}, {{ excellent_count }}]
+        }]
+    }
+});
+
+const progressCtx = document.getElementById('progressChart');
+
+new Chart(progressCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Improved', 'Decreased', 'No Change'],
+        datasets: [{
+            label: 'Students',
+            data: [{{ improved_count }}, {{ decreased_count }}, {{ no_change_count }}]
+        }]
+    }
+});
+</script>
+
+{% endblock %}

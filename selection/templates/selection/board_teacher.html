@@ -1,0 +1,368 @@
+{% extends "selection/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'selection/board.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="board-hero">
+    <h1><i class="bi bi-stars"></i> Teacher Board Control</h1>
+    {% if active %}
+        <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+            <span class="session-chip"><i class="bi bi-lock-fill"></i> {{ active.classroom }} &middot; {{ active.subject.name }}{% if active.topic %} &middot; {{ active.topic.name }}{% endif %}</span>
+            <a href="{% url 'board_display' %}" target="_blank" class="btn btn-sm btn-light">
+                <i class="bi bi-display"></i> Open display screen
+            </a>
+        </div>
+        <p class="mt-2 mb-0">This class is locked in. Finish the class to pick a different classroom or subject.</p>
+    {% else %}
+        <p>Pick a class and topic to start a session. The AI recommends students to call up, weighted toward those who need the most help.</p>
+    {% endif %}
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> {{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+{% if not active %}
+<div class="card control-panel border-0">
+    <div class="card-body p-4">
+        <form method="POST" action="{% url 'board_teacher_action' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="start">
+
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Classroom</label>
+                    <select name="classroom" id="classroomSelect" class="form-select" required>
+                        <option value="">-- Choose Classroom --</option>
+                        {% for classroom in classrooms %}
+                            <option value="{{ classroom }}">{{ classroom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Subject</label>
+                    <select name="subject" id="subjectSelect" class="form-select" required>
+                        <option value="">-- Choose Subject --</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Topic (optional)</label>
+                    <select name="topic" id="topicSelect" class="form-select">
+                        <option value="">-- General --</option>
+                        {% for topic in all_topics %}
+                            <option value="{{ topic.id }}" data-subject="{{ topic.subject_id }}">{{ topic.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-call w-100">
+                        <i class="bi bi-play-fill"></i> Start class
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if active and active.state == "attendance" %}
+<div class="card control-panel border-0">
+    <div class="card-body p-4">
+        <h5 class="fw-bold mb-1">Take attendance &mdash; {{ active.classroom }}</h5>
+        <p class="text-muted">Everyone is present by default. Tick anyone who's absent today, then confirm.</p>
+
+        <form method="POST" action="{% url 'board_teacher_action' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="confirm_attendance">
+
+            <div class="attendance-roster">
+                {% for student in roster %}
+                <label class="attendance-row">
+                    <span>{{ student.full_name }}</span>
+                    <span class="attendance-toggle">
+                        <input type="checkbox" name="absent" value="{{ student.id }}"> Absent
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-call w-100 mt-3">
+                <i class="bi bi-check2-square"></i> Confirm attendance &amp; start calling
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if active.state == "idle" %}
+<div class="card control-panel border-0">
+    <div class="card-body p-4 text-center">
+        <form method="POST" action="{% url 'board_teacher_action' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="call">
+            <button type="submit" class="btn btn-call px-5">
+                <i class="bi bi-magic"></i> Call next student
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if confirmed_selection %}
+<div class="card reveal-card mt-4 priority-{{ active.current_priority|lower }}" data-animate="true" data-candidates="">
+    <div class="confirmed-banner"><i class="bi bi-check-circle-fill"></i> Called to the board</div>
+
+    <div class="avatar-ring">
+        {% if active.current_student.photo %}
+            <img src="{{ active.current_student.photo.url }}" alt="{{ active.current_student.full_name }}">
+        {% else %}
+            {{ active.current_student.full_name|first }}
+        {% endif %}
+    </div>
+
+    <div class="reveal-name" data-final-name="{{ active.current_student.full_name }}"></div>
+    <p class="text-muted mb-3">{{ active.current_student.student_id }} &middot; {{ active.current_student.classroom }}</p>
+
+    <div class="mb-3">
+        <span class="badge-pill badge-priority"><i class="bi bi-flag-fill"></i> {{ active.current_priority }} priority</span>
+        <span class="badge-pill badge-neutral">{{ active.current_status }}</span>
+        <span class="badge-pill badge-neutral"><i class="bi bi-repeat"></i> Called {{ selection_count }}x</span>
+        {% if confirmed_selection %}
+        <span class="badge-pill badge-neutral" title="Official mark {{ confirmed_selection.average_at_selection }} + board bonus {{ confirmed_selection.board_bonus_at_selection }}">
+            <i class="bi bi-graph-up-arrow"></i> Mark {{ confirmed_selection.average_at_selection }}{% if confirmed_selection.board_bonus_at_selection %} &middot; Board {{ confirmed_selection.board_bonus_at_selection|floatformat:0 }}{% if confirmed_selection.board_bonus_at_selection > 0 %}+{% endif %}{% endif %}
+        </span>
+        {% endif %}
+        {% if confirmed_selection.is_retry %}
+        <span class="badge-pill badge-retry"><i class="bi bi-arrow-counterclockwise"></i> Retry call-back</span>
+        {% endif %}
+    </div>
+
+    {% if confirmed_selection.outcome %}
+        <div class="outcome-recorded {% if confirmed_selection.outcome == 'solved' %}solved{% else %}not-solved{% endif %}">
+            {% if confirmed_selection.outcome == 'solved' %}
+                <i class="bi bi-check-circle-fill"></i> Marked as solved (+{{ confirmed_selection.points }} point{% if confirmed_selection.points != 1 %}s{% endif %})
+                {% if confirmed_selection.is_retry %}&mdash; retry resolved!{% endif %}
+            {% elif confirmed_selection.outcome == 'partial' %}
+                <i class="bi bi-dash-circle"></i> Marked as partly correct
+            {% else %}
+                <i class="bi bi-dash-circle"></i> Marked as not solved ({{ confirmed_selection.points }} point)
+            {% endif %}
+        </div>
+
+        <p class="welcome-line mb-2 mt-3">Tag it (optional)</p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center mb-2">
+            {% for tag in quick_tags %}
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_tag">
+                <input type="hidden" name="tag" value="{{ tag }}">
+                <button type="submit" class="btn btn-tag {% if tag in confirmed_selection.tags %}active{% endif %}">{{ tag }}</button>
+            </form>
+            {% endfor %}
+        </div>
+    {% elif confirmed_selection.question %}
+        {% with q=confirmed_selection.question %}
+        <div class="question-panel">
+            <div class="question-eyebrow"><i class="bi bi-question-circle-fill"></i> Question &middot; {{ q.get_difficulty_display }}</div>
+            <p class="question-text">{{ q.text }}</p>
+            {% if q.image %}<img src="{{ q.image.url }}" alt="" class="question-image">{% endif %}
+
+            {% if q.answer_type == "multiple_choice" %}
+                <div class="d-flex flex-wrap gap-2 justify-content-center my-3">
+                    {% for choice in q.choices %}
+                    <form method="POST" action="{% url 'board_teacher_action' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="answer_question">
+                        <input type="hidden" name="choice" value="{{ choice }}">
+                        <button type="submit" class="btn btn-choice">{{ choice }}</button>
+                    </form>
+                    {% endfor %}
+                </div>
+            {% elif q.answer_type == "number" %}
+                <form method="POST" action="{% url 'board_teacher_action' %}" class="d-flex gap-2 justify-content-center align-items-center my-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="answer_question">
+                    <input type="number" step="any" name="number_answer" class="form-control" style="max-width:160px;" placeholder="Student's answer" required>
+                    <button type="submit" class="btn btn-call">Check</button>
+                </form>
+            {% endif %}
+
+            <button type="button" class="btn btn-reveal" data-reveal-toggle>
+                <i class="bi bi-eye"></i> Reveal answer (teacher only)
+            </button>
+            <div class="answer-reveal" hidden>
+                <p><strong>Answer:</strong> {{ q.answer }}</p>
+                {% if q.explanation %}<p class="text-muted">{{ q.explanation }}</p>{% endif %}
+            </div>
+        </div>
+        {% endwith %}
+
+        <p class="welcome-line mb-2 mt-3">Mark it yourself</p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center mt-2 mb-2">
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="mark_outcome">
+                <input type="hidden" name="outcome" value="solved">
+                <button type="submit" class="btn btn-solved"><i class="bi bi-check-lg"></i> Solved</button>
+            </form>
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="mark_outcome">
+                <input type="hidden" name="outcome" value="partial">
+                <button type="submit" class="btn btn-not-solved"><i class="bi bi-dash-lg"></i> Partly correct</button>
+            </form>
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="mark_outcome">
+                <input type="hidden" name="outcome" value="not_solved">
+                <button type="submit" class="btn btn-not-solved"><i class="bi bi-x-lg"></i> Didn't solve</button>
+            </form>
+        </div>
+    {% else %}
+        <form method="POST" action="{% url 'board_teacher_action' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="ask_question">
+            <button type="submit" class="btn btn-call px-4 mb-2"><i class="bi bi-patch-question"></i> Ask a question</button>
+        </form>
+
+        <p class="welcome-line mb-2">Or skip this student</p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center mt-2 mb-2">
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="skip">
+                <input type="hidden" name="reason" value="absent">
+                <button type="submit" class="btn btn-skip-reason"><i class="bi bi-person-dash"></i> Absent</button>
+            </form>
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="skip">
+                <input type="hidden" name="reason" value="not_ready">
+                <button type="submit" class="btn btn-skip-reason"><i class="bi bi-hourglass-split"></i> Not ready</button>
+            </form>
+            <form method="POST" action="{% url 'board_teacher_action' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="skip">
+                <input type="hidden" name="reason" value="other">
+                <button type="submit" class="btn btn-skip-reason"><i class="bi bi-arrow-repeat"></i> Other</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+{% if confirmed_selection.outcome %}
+<div class="text-center mt-3 d-flex flex-wrap gap-3 justify-content-center">
+    <form method="POST" action="{% url 'board_teacher_action' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="call">
+        <button type="submit" class="btn btn-call px-5"><i class="bi bi-magic"></i> Call next student</button>
+    </form>
+    <form method="POST" action="{% url 'board_teacher_action' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="ask_again">
+        <button type="submit" class="btn btn-finish"><i class="bi bi-arrow-repeat"></i> Ask {{ active.current_student.full_name }} another question</button>
+    </form>
+</div>
+{% endif %}
+{% endif %}
+
+{% if active %}
+<div class="text-center mt-4">
+    <form method="POST" action="{% url 'board_teacher_action' %}" onsubmit="return confirm('Finish this class? You will not be able to call more students until you start a new class.');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="finish">
+        <button type="submit" class="btn btn-finish"><i class="bi bi-flag"></i> Finish class</button>
+    </form>
+</div>
+{% endif %}
+
+<script src="{% static 'selection/board.js' %}"></script>
+<script>
+    const classroomSelect = document.getElementById("classroomSelect");
+    const subjectSelect = document.getElementById("subjectSelect");
+    const topicSelect = document.getElementById("topicSelect");
+
+    if (classroomSelect && subjectSelect) {
+        const allSubjects = Array.from(subjectSelect.options);
+
+        classroomSelect.addEventListener("change", function () {
+            const selectedClassroom = this.value;
+
+            subjectSelect.innerHTML = "";
+            subjectSelect.appendChild(allSubjects[0]);
+
+            allSubjects.slice(1).forEach(option => {
+                if (option.text.startsWith(selectedClassroom + " -")) {
+                    subjectSelect.appendChild(option);
+                }
+            });
+
+            if (topicSelect) {
+                topicSelect.dispatchEvent(new Event("refresh"));
+            }
+        });
+    }
+
+    if (subjectSelect && topicSelect) {
+        const allTopics = Array.from(topicSelect.options);
+
+        function refreshTopics() {
+            const selectedSubject = subjectSelect.value;
+
+            topicSelect.innerHTML = "";
+            topicSelect.appendChild(allTopics[0]);
+
+            allTopics.slice(1).forEach(option => {
+                if (option.dataset.subject === selectedSubject) {
+                    topicSelect.appendChild(option);
+                }
+            });
+        }
+
+        subjectSelect.addEventListener("change", refreshTopics);
+        topicSelect.addEventListener("refresh", refreshTopics);
+    }
+
+    document.querySelectorAll("[data-reveal-toggle]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const panel = btn.nextElementSibling;
+            panel.hidden = !panel.hidden;
+            btn.innerHTML = panel.hidden
+                ? '<i class="bi bi-eye"></i> Reveal answer (teacher only)'
+                : '<i class="bi bi-eye-slash"></i> Hide answer';
+        });
+    });
+
+    {% if active %}
+    (function () {
+        const RENDERED_VERSION = "{{ session_version }}";
+        setInterval(function () {
+            const active = document.activeElement;
+            if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) {
+                return;
+            }
+            fetch("/board/display/status/")
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.version !== RENDERED_VERSION) {
+                        window.location.reload();
+                    }
+                })
+                .catch(function () {});
+        }, 3000);
+    })();
+    {% endif %}
+</script>
+
+{% endblock %}
