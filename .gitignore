@@ -1,7 +1,9 @@
 venv/
+.venv/
 __pycache__/
 *.pyc
 .env
+staticfiles/
 
 # Local data: contains student records and photos, never publish
 db.sqlite3
